@@ -1,0 +1,58 @@
+.outer {
+  margin: 0 6%;
+  background-color: white;
+}
+
+.navbar {
+  background-color: #353A3F;
+}
+
+.navbar h2 {
+  color: white;
+}
+
+.listsEnter {
+  background-color: #F8F9FA;
+}
+
+.listsEnter input {
+  padding: 2% 25% 2% 2%;
+  margin: 2% 0 2% -2.3%;
+  font-size: 25px;
+}
+
+.lists {
+  padding: 2% 0 2.5% 2%;
+  margin-left: -2.3%;
+  font-size: 25px;
+}
+
+.items hr {
+  width: 102%;
+  margin-left: 2%;
+}
+
+.listName {
+  margin: 2.5% 0 2% 2%;
+}
+
+.listedItems {
+  margin: 1.5% 0 2% 2%;
+  border: 1px solid gray;
+  border-radius: 20px;
+}
+
+.num {
+  border: 1px solid;
+  padding: 1%;
+  font-size: 25px;
+  border-color: gray;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.num2 {
+  padding: 1%;
+  font-size: 25px;
+}/*# sourceMappingURL=style.css.map */
