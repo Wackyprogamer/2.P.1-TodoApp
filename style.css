@@ -11,46 +11,18 @@
   color: white;
 }
 
-.listsEnter {
-  background-color: #F8F9FA;
+.mainContent {
+  background-color: #f8f9fA;
+  padding-bottom: 0.5%;
 }
 
-.listsEnter input {
+.mainContent input {
   margin-top: 10px;
-  font-size: 25px;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
-.lists {
-  margin-top: 10px;
-  font-size: 25px;
-}
-
-.items hr {
-  width: 102%;
-  margin-left: 2%;
-}
-
-.listName {
-  margin: 2.5% 0 2% 2%;
-}
-
-.listedItems {
-  margin: 1.5% 0 2% 2%;
-  border: 1px solid gray;
-  border-radius: 20px;
-}
-
-.num {
-  border: 1px solid;
-  padding: 1%;
-  font-size: 25px;
-  border-color: gray;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-}
-
-.num2 {
-  padding: 1%;
-  font-size: 25px;
+.mainContent button {
+  font-size: 20px;
+  padding-right: 15px;
 }/*# sourceMappingURL=style.css.map */
