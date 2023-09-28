@@ -6,76 +6,95 @@
     <title>To Do</title>
     <link rel="icon" type="image/x-icon" href="https://icons8.com/icon/eyfXBlvDyk9g/list">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/1713fc1b17.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     
-    <div class="outer">
+<div class="outer">
 
-      <nav class="navbar">
+    <nav class="navbar">
         <!-- navbar not needed but looks cool --> 
-        <h2 class="col-11">Listo</h2>
+    <h2 class="col-10 col-sm-10">Listo</h2>
 
-        <i class="fa-solid fa-gear" style="color: #9B9DA0;"></i>
+    <i id="gear" class="fa-solid fa-gear col-1 col-sm-1" style="color: #9B9DA0;"></i>
 
-        <i class="fa-regular fa-circle-user" style="color: #9b9da0;"></i>
+    <i id="user" class="fa-regular fa-circle-user col-1 col-sm-1" style="color: #9b9da0;"></i>
 
-      </nav>
+    </nav>
      
-      <div class="container-fluid">
+    <div class="container-fluid">
 
         <div class="row">
           
-          <div class="col-3 mainContent">
+            <div class="col-3 col-sm-3 mainContent">
 
-            <input class="col-6" type="textbox" id="textNameList" placeholder="Enter List Name">
-            <!-- list of todo lists go here -->
+                <div class="row input-group">
 
-            <button type="button" id="addNewList">Add List</button>
+                    <input type="textbox" class="form-control col-6 col-sm-6"  id="textNameList" placeholder="Enter List Name">
+                    <!-- list of todo lists go here -->
 
-            <ul class="list-group" id="lists">
+                    <div class="input-group-append col-6 col-sm-6">
 
-              <li class="list-group-item" id="1">Shopping list</li>
+                        <button type="button" class="btn btn-primary"  id="addNewList">Add List</button>
 
-            </ul>
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <ul class="list-group" id="lists">
+
+                        <li class="list-group-item" id="1">Shopping list</li>
+
+                    </ul>
+
+                </div>
   
-          </div>
+            </div>
      
-          <div class="col-8">
+            <div class="col-9 col-sm-9">
 
-            <div class="todoList">
+                <div class="row todoList">
 
-              <h1 id="headerList">Select A list To View</h1>
-            <!-- current todo list name goes here -->
+                    <h2 class="col-8 col-sm-8" id="headerList">Select A list To View</h2>
+                    <!-- current todo list name goes here -->
 
+                    <div class="col-3 col-sm-3 input-group">
 
-              <input type="textBox" id="textTodo" placeholder="Enter Item...">
+                        <input class="form-control"  type="textBox" id="textTodo" placeholder="Enter Item...">
               
-            <!--Input Box to Add new Todo's-->
+                        <!--Input Box to Add new Todo's-->
 
-              <button type="button" id="addTodo">Add Item</button>
+                        <span id="inputSpan1" class="input-group-btn">
+
+                            <button class="btn btn-primary" type="button" id="addTodo">Add Item</button>
             
-            <!--Button to initiate JS to add item to current array-->
+                            <!--Button to initiate JS to add item to current array-->
+                        
+                        </span>
 
-              <hr class="col-12"></hr>
+                    </div>
 
-            <!-- current todo list goes here -->
+                </div>
 
-              <ul id="todos">
+                <hr class="col-12 col-sm-12"></hr>
+
+                <!-- current todo list goes here -->
+        
+                <ul id="todos">
                 
-              </ul>
+                </ul>
 
             </div>
 
-          </div>
-
         </div>
 
-      </div>
-
     </div>
+
+</div>
 
 </body>
 

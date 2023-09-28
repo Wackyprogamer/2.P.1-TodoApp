@@ -1,5 +1,5 @@
 .outer {
-  margin: 0 6%;
+  margin: auto 6%;
   background-color: white;
 }
 
@@ -8,16 +8,25 @@
 }
 
 .navbar h2 {
+  padding-left: 1%;
   color: white;
+}
+
+#gear {
+  padding-left: 3%;
+}
+
+#user {
+  padding-left: 0.5%;
 }
 
 .mainContent {
   background-color: #f8f9fA;
   padding-bottom: 0.5%;
+  padding-top: 0.5%;
 }
 
 .mainContent input {
-  margin-top: 10px;
   font-size: 20px;
   margin-bottom: 10px;
 }
@@ -25,4 +34,13 @@
 .mainContent button {
   font-size: 20px;
   padding-right: 15px;
+}
+
+#headerList {
+  margin-top: 1%;
+}
+
+#inputSpan1 {
+  margin-left: 1.5%;
+  margin-right: 3.5%;
 }/*# sourceMappingURL=style.css.map */
