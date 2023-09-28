@@ -5,7 +5,7 @@ const lists = {
     
     }
 
-    const currentList = lists[1];
+    const currentList = lists[0];
 
     // added click function when user clicks button it will grab value from
     // text box and append a new list -- and add it to the array
@@ -69,3 +69,38 @@ const lists = {
         }
 
     });
+
+
+    //Created function to grab input value in text box when add item btn 
+    //is clicked and will append to the selected array
+
+    document.getElementById('addTodo').addEventListener('click', addNewTodo);
+
+    function addNewTodo () {
+
+        let newTodoText = document.getElementById('textTodo').value;
+
+        let newTodoItemAdded = {
+
+            text: newTodoText,
+            completed: false
+        };
+
+        let currentSelectedTodos = currentList.todos;
+
+        currentSelectedTodos.push(newTodoItemAdded);
+
+        const todosContainer = document.getElementById('todos');
+        todosContainer.innerHTML = '';
+
+        currentSelectedTodos.forEach(function(todo) {
+
+            let addedLi = document.createElement('li');
+
+            addedLi.textContent = todo.text
+
+            todosContainer.appendChild(addedLi);
+
+        });
+
+    }
