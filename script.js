@@ -20,7 +20,7 @@ const lists = {
 
         let i = document.createElement('i');
 
-        i.innerHTML = '<i class="fa-solid fa-trash-can" style="color: #006efd;"></i>';
+        i.innerHTML = '<i class="fa-solid fa-trash-can" id="trashCan" style="color: #006efd;"></i>';
 
         newLI.classList = "list-group-item d-flex justify-content-between";
 
@@ -38,6 +38,17 @@ const lists = {
         lists[Object.keys(lists).length + 1] = newList;
 
         document.getElementById('lists').appendChild(newLI).appendChild(i);
+
+    }
+
+    //added deletion function if user clicks trashcan to delete selected lists
+
+    document.getElementById('trashCan').addEventListener('click', removeList);
+
+    function removeList() {
+
+        
+
 
     }
 
@@ -108,3 +119,5 @@ const lists = {
         });
 
     }
+
+    
