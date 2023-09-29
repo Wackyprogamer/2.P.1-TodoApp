@@ -45,4 +45,12 @@
 
 #addNewList {
   margin: 1% 0;
+}
+
+li {
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: lightgray;
 }/*# sourceMappingURL=style.css.map */
