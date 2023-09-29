@@ -18,6 +18,10 @@ const lists = {
 
         let newLI = document.createElement('li');
 
+        let i = document.createElement('i');
+
+        i.innerHTML = '<i class="fa-solid fa-trash-can" style="color: #006efd;"></i>';
+
         newLI.classList = "list-group-item";
 
         newLI.id = Object.keys(lists).length + 1;
@@ -33,7 +37,7 @@ const lists = {
 
         lists[Object.keys(lists).length + 1] = newList;
 
-        document.getElementById('lists').appendChild(newLI);
+        document.getElementById('lists').appendChild(newLI).appendChild(i);
 
     }
 
