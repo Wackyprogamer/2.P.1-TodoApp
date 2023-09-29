@@ -22,7 +22,7 @@ const lists = {
 
         i.innerHTML = '<i class="fa-solid fa-trash-can" style="color: #006efd;"></i>';
 
-        newLI.classList = "list-group-item";
+        newLI.classList = "list-group-item d-flex justify-content-between";
 
         newLI.id = Object.keys(lists).length + 1;
 
