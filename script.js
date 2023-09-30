@@ -5,7 +5,7 @@ const lists = {
     
     }
 
-    const currentList = lists[0];
+    let currentList = {};
 
     // added click function when user clicks button it will grab value from
     // text box and append a new list -- and add it to the array
@@ -14,43 +14,52 @@ const lists = {
 
     function addList() {
 
-        let newName = document.getElementById('textNameList').value;
+        let newName = document.getElementById('textNameList').value; //
 
-        let newLI = document.createElement('li');
+        if (newName in lists) {
 
-        let i = document.createElement('i');
+            console.error('List already exists')
 
-        i.innerHTML = '<i class="fa-solid fa-trash-can" id="trashCan" style="color: #006efd;"></i>';
+        } else {
 
-        newLI.classList = "list-group-item d-flex justify-content-between";
+            let newLI = document.createElement('li');
 
-        newLI.id = Object.keys(lists).length + 1;
+            let i = document.createElement('i');
 
-        newLI.textContent = newName;
+            i.innerHTML = '<i class="fa-solid fa-trash-can" id="trashCan" style="color: #006efd;"></i>';
 
-        let newList = {
+            newLI.classList = "list-group-item d-flex justify-content-between";
 
-            name: newName,
-            todos: []
+            newLI.id = newName;
 
-        };
+            newLI.textContent = newName;
 
-        lists[Object.keys(lists).length + 1] = newList;
+            lists[newName] = {
 
-        document.getElementById('lists').appendChild(newLI).appendChild(i);
+                name: newName,
+                todos: []
+
+            };
+
+            document.getElementById('lists').appendChild(newLI).appendChild(i);
+
+            document.getElementById('lists')
+                .getElementsByTagName('li')
+                .namedItem(newName)
+                .getElementsByTagName('i')
+                .item(0)
+                .addEventListener('click', function(event) {
+
+                    event.target.parentElement.parentElement.remove();
+
+                    delete lists[newName];
+
+            });
+
+        }
 
     }
 
-    //added deletion function if user clicks trashcan to delete selected lists
-
-    document.getElementById('trashCan').addEventListener('click', removeList);
-
-    function removeList() {
-
-        
-
-
-    }
 
     //update Select a list to view to selected list via click event & Display their Items
 
@@ -61,6 +70,8 @@ const lists = {
             let clickedListText = event.target.textContent;
 
             document.getElementById('headerList').textContent = clickedListText;
+
+            currentList = event.target.id;
 
             let listId = event.target.id;
 
@@ -87,7 +98,7 @@ const lists = {
 
 
     //Created function to grab input value in text box when add item btn 
-    //is clicked and will append to the selected array
+    //is clicked and will append to the selected array for todos in object
 
     document.getElementById('addTodo').addEventListener('click', addNewTodo);
 
@@ -101,7 +112,7 @@ const lists = {
             completed: false
         };
 
-        let currentSelectedTodos = currentList.todos;
+        let currentSelectedTodos = lists[currentList].todos;
 
         currentSelectedTodos.push(newTodoItemAdded);
 
