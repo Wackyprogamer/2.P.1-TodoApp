@@ -125,7 +125,89 @@ const lists = {
 
             addedLi.textContent = todo.text
 
+            addedLi.classList = "list-group-item d-flex justify-content-between";
+
+            addedLi.id = todo.text;
+
+            let checkBox = document.createElement('input')
+            checkBox.setAttribute('type', 'checkBox');
+
+            checkBox.addEventListener('change', function () {
+                if (checkBox.checked) {
+
+                    addedLi.setAttribute('style', 'text-decoration: line-through;');
+                    iedit.removeAttribute('text-decoration: line-through');
+
+                } else {
+
+                    addedLi.setAttribute('style', '');
+                    
+
+                }
+
+            
+            });
+
+
+            let i = document.createElement('i');
+
+            i.setAttribute('class', 'fa-solid fa-trash-can');
+
+            i.setAttribute('id', 'trashCanTodo');
+
+            i.setAttribute('style', 'color: #006efd;');
+
+            let iedit = document.createElement('i')
+
+            iedit.setAttribute('class', 'fa-solid fa-pencil');
+
+            iedit.setAttribute('id', 'editTodo');
+
+            iedit.setAttribute('style', 'color: #006efd;');
+
+            
             todosContainer.appendChild(addedLi);
+            addedLi.appendChild(checkBox);
+            addedLi.appendChild(iedit);
+            addedLi.appendChild(i);
+            
+
+            i.addEventListener('click', function(event) {
+
+                i.parentElement.remove();
+
+                let itemIndex = currentSelectedTodos.findIndex((todoItem) => todoItem.text === todo.text);
+
+                currentSelectedTodos.splice(itemIndex, 1);
+
+            });
+
+            iedit.addEventListener('click', function(event) {
+
+                let editableItem = event.target.parentElement;
+
+                let oldItemText = editableItem.textContent;
+
+                editableItem.addEventListener('keypress', function (e) {
+
+                    if (e.key === 'Enter') {
+
+                        e.preventDefault();
+
+                        editableItem.setAttribute('contentEditable', false);
+
+                        let editableIndex = currentSelectedTodos.findIndex((todoItem) => todoItem.text === oldItemText);
+
+                        currentSelectedTodos[editableIndex].text = editableItem.textContent;
+
+                    }
+
+                });
+
+                editableItem.setAttribute('contentEditable', true);
+
+
+            });
 
         });
 
