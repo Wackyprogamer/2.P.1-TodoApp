@@ -129,11 +129,11 @@ let currentList = localStorage.getItem("currentList") ?? '';
             checkBox.addEventListener('change', function () {
                 if (checkBox.checked) {
 
-                    addedLi.setAttribute('style', 'text-decoration: line-through;');
+                    todoLi.setAttribute('style', 'text-decoration: line-through;');
 
                 } else {
 
-                    addedLi.setAttribute('style', 'text-decoration: none;');
+                    todoLi.setAttribute('style', 'text-decoration: none;');
                     
 
                 }
