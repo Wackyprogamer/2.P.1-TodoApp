@@ -1,11 +1,19 @@
 // lists array to contain our lists with name and todos
 
-const lists = {
+const lists = localStorage.getItem("lists") ? JSON.parse(localStorage.getItem("lists")): {};
 
-    
+let currentList = localStorage.getItem("currentList") ?? '';
+
+    function saveToLocalStorage () {
+
+        localStorage.setItem("currentList", JSON.stringify(currentList));
+
+        localStorage.setItem("lists", JSON.stringify(lists));
+
     }
 
-    let currentList = {};
+    render();
+
 
     // added click function when user clicks button it will grab value from
     // text box and append a new list -- and add it to the array
@@ -54,6 +62,8 @@ const lists = {
 
                     delete lists[newName];
 
+                    saveToLocalStorage();
+
             });
 
         }
@@ -87,7 +97,91 @@ const lists = {
 
                 todoLi.textContent = todo.text;
 
+                todoLi.classList.add("list-group-item");
+
+                todoLi.classList.add("d-flex");
+
+                todoLi.classList.add("justify-content-between");
+
+                todoLi.setAttribute('id', todo.text);
+
                 todoContainer.appendChild(todoLi);
+
+                let i = document.createElement('i');
+
+            i.setAttribute('class', 'fa-solid fa-trash-can');
+
+            i.setAttribute('id', 'trashCanTodo');
+
+            i.setAttribute('style', 'color: #006efd;');
+
+            let iedit = document.createElement('i')
+
+            iedit.setAttribute('class', 'fa-solid fa-pencil');
+
+            iedit.setAttribute('id', 'editTodo');
+
+            iedit.setAttribute('style', 'color: #006efd;');
+
+            let checkBox = document.createElement('input')
+            checkBox.setAttribute('type', 'checkBox');
+
+            checkBox.addEventListener('change', function () {
+                if (checkBox.checked) {
+
+                    addedLi.setAttribute('style', 'text-decoration: line-through;');
+
+                } else {
+
+                    addedLi.setAttribute('style', 'text-decoration: none;');
+                    
+
+                }
+
+            });
+
+            todoContainer.appendChild(todoLi);
+            todoLi.appendChild(checkBox);
+            todoLi.appendChild(iedit);
+            todoLi.appendChild(i);
+            
+
+            i.addEventListener('click', function(event) {
+
+                i.parentElement.remove();
+
+                let itemIndex = currentSelectedTodos.findIndex((todoItem) => todoItem.text === todo.text);
+
+                currentSelectedTodos.splice(itemIndex, 1);
+
+            });
+
+            iedit.addEventListener('click', function(event) {
+
+                let editableItem = event.target.parentElement;
+
+                let oldItemText = editableItem.textContent;
+
+                editableItem.addEventListener('keypress', function (e) {
+
+                    if (e.key === 'Enter') {
+
+                        e.preventDefault();
+
+                        editableItem.setAttribute('contentEditable', false);
+
+                        let editableIndex = currentSelectedTodos.findIndex((todoItem) => todoItem.text === oldItemText);
+
+                        currentSelectedTodos[editableIndex].text = editableItem.textContent;
+
+                    }
+
+                });
+
+                editableItem.setAttribute('contentEditable', true);
+
+
+            });
                 
             });
 
@@ -208,31 +302,39 @@ const lists = {
 
             });
 
+            saveToLocalStorage();
+
         });
 
     }
 
     function render() {
         // this will hold the html that will be displayed in the sidebar
-        let listsHtml = '<ul class="list-group">';
+        let listsHtml = '';
         // iterate through the lists to get their names
-        lists.forEach((list) => {
-          listsHtml += `<li class="list-group-item">${list.name}</li>`;
-        });
-       
-        listsHtml += '</ul>';
-        // print out the lists
+        for (let [listName] of Object.entries(lists)) {
+            listsHtml += `<li class="list-group-item" id="${listName}">${listName}<i><i class="fa-solid fa-trash-can" id="trashCan" style="color: #006efd;"></i></i></li>`;
+        }
+
+        
        
         document.getElementById('lists').innerHTML = listsHtml;
         // print out the name of the current list
        
-        document.getElementById('current-list-name').innerText = currentList.name;
+        document.getElementById('headerList').innerText = currentList;
         // iterate over the todos in the current list
        
-        let todosHtml = '<ul class="list-group-flush">';
-        currentList.todos.forEach((list) => {
-          todosHtml += `<li class="list-group-item">${todo.text}</li>`;
+        let todosHtml = '';
+        (lists[currentList]?.todos ?? []).forEach((todoItem) => {
+          todosHtml += `<li class="list-group-item d-flex justify-content-between id=${todoItem.text}">${todoItem.text}</li>`;
         });
         // print out the todos
-        document.getElementById('current-list-todos').innerHTML = todosHtml;
+        document.getElementById('todos').innerHTML = todosHtml;
        }
+
+    function renderCurrentList () {
+
+        addNewTodo();
+        addList();
+
+    }
