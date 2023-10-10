@@ -2,11 +2,11 @@
 
 const lists = localStorage.getItem("lists") ? JSON.parse(localStorage.getItem("lists")): {};
 
-let currentList = localStorage.getItem("currentList") ?? '';
+let currentListId = localStorage.getItem("currentListId") ?? '';
 
     function saveToLocalStorage () {
 
-        localStorage.setItem("currentList", JSON.stringify(currentList));
+        localStorage.setItem("currentListId", JSON.stringify(currentListId));
 
         localStorage.setItem("lists", JSON.stringify(lists));
 
@@ -19,6 +19,15 @@ let currentList = localStorage.getItem("currentList") ?? '';
     // text box and append a new list -- and add it to the array
 
     document.getElementById('addNewList').addEventListener('click', addList);
+
+
+    function guidGenerator() {
+        var S4 = function() {
+           return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        };
+        return 'a' + (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+    }
+
 
     function addList() {
 
@@ -34,158 +43,70 @@ let currentList = localStorage.getItem("currentList") ?? '';
 
             let i = document.createElement('i');
 
+            let id = guidGenerator();
             i.innerHTML = '<i class="fa-solid fa-trash-can" id="trashCan" style="color: #006efd;"></i>';
 
-            newLI.classList = "list-group-item d-flex justify-content-between";
+            newLI.classList.add("list-group-item");
 
-            newLI.id = newName;
+            newLI.classList.add("d-flex");
+
+            newLI.classList.add("justify-content-between");
+
+        
+            newLI.id = id;
 
             newLI.textContent = newName;
 
-            lists[newName] = {
+            
+            lists[id] = {
 
                 name: newName,
-                todos: []
+                todos: {}
 
             };
 
             document.getElementById('lists').appendChild(newLI).appendChild(i);
-
-            document.getElementById('lists')
-                .getElementsByTagName('li')
-                .namedItem(newName)
-                .getElementsByTagName('i')
-                .item(0)
-                .addEventListener('click', function(event) {
-
-                    event.target.parentElement.parentElement.remove();
-
-                    delete lists[newName];
-
-                    saveToLocalStorage();
-
-            });
-
+            let trashCanElement = document.getElementById('lists') 
+            .getElementsByTagName('li')
+            .namedItem(id)
+            .getElementsByTagName('i') 
+            .item(0);
+            bindClickOnListTrashCan(trashCanElement,id);
+                
         }
-
+        saveToLocalStorage();
     }
 
+    function bindClickOnListTrashCan(trashCanElement,id) {
 
+        trashCanElement.addEventListener('click', function(event) {
+
+            event.target.parentElement.parentElement.remove();
+
+            delete lists[id];
+            currentListId = "";
+            document.getElementById('headerList').textContent = "";
+            saveToLocalStorage();
+
+    });
+
+    }
     //update Select a list to view to selected list via click event & Display their Items
+
+
 
     document.getElementById('lists').addEventListener('click', function(event) {
 
         if(event.target.tagName === 'LI') {
-
+            
             let clickedListText = event.target.textContent;
+            let listId = event.target.id;
 
             document.getElementById('headerList').textContent = clickedListText;
 
-            currentList = event.target.id;
+            currentListId = listId;
 
-            let listId = event.target.id;
-
-            let todoItems = lists[listId].todos;
-
-            let todoContainer = document.getElementById('todos');
-
-            todoContainer.innerHTML = '';
-
-            todoItems.forEach(function(todo) {
-
-                let todoLi = document.createElement('li');
-
-                todoLi.textContent = todo.text;
-
-                todoLi.classList.add("list-group-item");
-
-                todoLi.classList.add("d-flex");
-
-                todoLi.classList.add("justify-content-between");
-
-                todoLi.setAttribute('id', todo.text);
-
-                todoContainer.appendChild(todoLi);
-
-                let i = document.createElement('i');
-
-            i.setAttribute('class', 'fa-solid fa-trash-can');
-
-            i.setAttribute('id', 'trashCanTodo');
-
-            i.setAttribute('style', 'color: #006efd;');
-
-            let iedit = document.createElement('i')
-
-            iedit.setAttribute('class', 'fa-solid fa-pencil');
-
-            iedit.setAttribute('id', 'editTodo');
-
-            iedit.setAttribute('style', 'color: #006efd;');
-
-            let checkBox = document.createElement('input')
-            checkBox.setAttribute('type', 'checkBox');
-
-            checkBox.addEventListener('change', function () {
-                if (checkBox.checked) {
-
-                    todoLi.setAttribute('style', 'text-decoration: line-through;');
-
-                } else {
-
-                    todoLi.setAttribute('style', 'text-decoration: none;');
-                    
-
-                }
-
-            });
-
-            todoContainer.appendChild(todoLi);
-            todoLi.appendChild(checkBox);
-            todoLi.appendChild(iedit);
-            todoLi.appendChild(i);
-            
-
-            i.addEventListener('click', function(event) {
-
-                i.parentElement.remove();
-
-                let itemIndex = currentSelectedTodos.findIndex((todoItem) => todoItem.text === todo.text);
-
-                currentSelectedTodos.splice(itemIndex, 1);
-
-            });
-
-            iedit.addEventListener('click', function(event) {
-
-                let editableItem = event.target.parentElement;
-
-                let oldItemText = editableItem.textContent;
-
-                editableItem.addEventListener('keypress', function (e) {
-
-                    if (e.key === 'Enter') {
-
-                        e.preventDefault();
-
-                        editableItem.setAttribute('contentEditable', false);
-
-                        let editableIndex = currentSelectedTodos.findIndex((todoItem) => todoItem.text === oldItemText);
-
-                        currentSelectedTodos[editableIndex].text = editableItem.textContent;
-
-                    }
-
-                });
-
-                editableItem.setAttribute('contentEditable', true);
-
-
-            });
-                
-            });
-
-
+            renderTodos();
         }
 
     });
@@ -196,145 +117,152 @@ let currentList = localStorage.getItem("currentList") ?? '';
 
     document.getElementById('addTodo').addEventListener('click', addNewTodo);
 
-    function addNewTodo () {
 
-        let newTodoText = document.getElementById('textTodo').value;
+function addNewTodo () {
 
+    if (currentListId) {
+        let todoId = guidGenerator();
         let newTodoItemAdded = {
-
-            text: newTodoText,
+            name: document.getElementById('textTodo').value,
             completed: false
         };
 
-        let currentSelectedTodos = lists[currentList].todos;
+        let currentSelectedTodos = lists[currentListId].todos;
+        currentSelectedTodos[todoId] = newTodoItemAdded;
+        
+        saveToLocalStorage();
+        renderTodos();
+    } else {
+        alert('Select a Todo List')
+    }
 
-        currentSelectedTodos.push(newTodoItemAdded);
+}
 
-        const todosContainer = document.getElementById('todos');
-        todosContainer.innerHTML = '';
 
-        currentSelectedTodos.forEach(function(todo) {
+/******
+*
+Render Functions
+*
+*******/
+function render() {
+    renderListsOfTodoList();
+    renderTodos();
+}
 
-            let addedLi = document.createElement('li');
+function renderListsOfTodoList() {
+    let listsHtml = '';
+    // iterate through the lists to get their names
+    for (let [id, {name}] of Object.entries(lists)) {
+        listsHtml += `<li class="list-group-item d-flex justify-content-between" id="${id}">${name}<i><i class="fa-solid fa-trash-can" id="trashCan" style="color: #006efd;"></i></i></li>`;
+    }
+    document.getElementById('lists').innerHTML = listsHtml;
 
-            addedLi.textContent = todo.text
+    for (let [id] of Object.entries(lists)) {
+        let trashCanElement = document.querySelector("#" + id).querySelector("#trashCan");
+        bindClickOnListTrashCan(trashCanElement, id);
+    }
+}
 
-            addedLi.classList = "list-group-item d-flex justify-content-between";
+function renderHeader() {
+    document.getElementById('headerList').innerText = lists[currentListId]?.name ?? '';
+}
 
-            addedLi.id = todo.text;
+function renderTodos() {
+    let todoItems = lists[currentListId]?.todos ?? {};
 
-            let checkBox = document.createElement('input')
-            checkBox.setAttribute('type', 'checkBox');
+    let todoContainer = document.getElementById('todos');
 
-            checkBox.addEventListener('change', function () {
-                if (checkBox.checked) {
+    todoContainer.innerHTML = '';
 
-                    addedLi.setAttribute('style', 'text-decoration: line-through;');
+    Object.entries(todoItems).forEach(function([todoId, {name, completed}]) {
 
-                } else {
+        let todoLi = document.createElement('li');
 
-                    addedLi.setAttribute('style', 'text-decoration: none;');
-                    
+        todoLi.textContent = name;
 
+        todoLi.classList.add("list-group-item");
+
+        todoLi.classList.add("d-flex");
+
+        todoLi.classList.add("justify-content-between");
+
+        todoLi.setAttribute('id', todoId);
+
+        todoContainer.appendChild(todoLi);
+
+        let i = document.createElement('i');
+
+        i.setAttribute('class', 'fa-solid fa-trash-can');
+
+        i.setAttribute('id', 'trashCanTodo');
+
+        i.setAttribute('style', 'color: #006efd;');
+
+        let iedit = document.createElement('i')
+
+        iedit.setAttribute('class', 'fa-solid fa-pencil');
+
+        iedit.setAttribute('id', 'editTodo');
+
+        iedit.setAttribute('style', 'color: #006efd;');
+
+        let checkBox = document.createElement('input')
+        checkBox.setAttribute('type', 'checkBox');
+
+        checkBox.addEventListener('change', function () {
+            if (checkBox.checked) {
+
+                todoLi.setAttribute('style', 'text-decoration: line-through;');
+
+            } else {
+
+                todoLi.setAttribute('style', 'text-decoration: none;');
+                
+
+            }
+
+        });
+
+        todoContainer.appendChild(todoLi);
+        todoLi.appendChild(checkBox);
+        todoLi.appendChild(iedit);
+        todoLi.appendChild(i);
+        
+        
+        i.addEventListener('click', function(event) {
+          const todoId = event.target.parentElement.id;
+          
+          delete todoItems[todoId];
+          
+          renderTodos();
+          saveToLocalStorage();
+
+        });
+
+        iedit.addEventListener('click', function(event) {
+
+            let editableItem = event.target.parentElement;
+            let todoId = editableItem.id;
+            let currentSelectedTodos = lists[currentListId].todos;
+            editableItem.addEventListener('keypress', function (e) {
+
+                if (e.key === 'Enter') {
+
+                    e.preventDefault();
+
+                    editableItem.setAttribute('contentEditable', false);
+
+                    currentSelectedTodos[todoId].name = editableItem.textContent;
+                    renderTodos();
+                    saveToLocalStorage();
                 }
 
-            
             });
 
-
-            let i = document.createElement('i');
-
-            i.setAttribute('class', 'fa-solid fa-trash-can');
-
-            i.setAttribute('id', 'trashCanTodo');
-
-            i.setAttribute('style', 'color: #006efd;');
-
-            let iedit = document.createElement('i')
-
-            iedit.setAttribute('class', 'fa-solid fa-pencil');
-
-            iedit.setAttribute('id', 'editTodo');
-
-            iedit.setAttribute('style', 'color: #006efd;');
-
-            
-            todosContainer.appendChild(addedLi);
-            addedLi.appendChild(checkBox);
-            addedLi.appendChild(iedit);
-            addedLi.appendChild(i);
-            
-
-            i.addEventListener('click', function(event) {
-
-                i.parentElement.remove();
-
-                let itemIndex = currentSelectedTodos.findIndex((todoItem) => todoItem.text === todo.text);
-
-                currentSelectedTodos.splice(itemIndex, 1);
-
-            });
-
-            iedit.addEventListener('click', function(event) {
-
-                let editableItem = event.target.parentElement;
-
-                let oldItemText = editableItem.textContent;
-
-                editableItem.addEventListener('keypress', function (e) {
-
-                    if (e.key === 'Enter') {
-
-                        e.preventDefault();
-
-                        editableItem.setAttribute('contentEditable', false);
-
-                        let editableIndex = currentSelectedTodos.findIndex((todoItem) => todoItem.text === oldItemText);
-
-                        currentSelectedTodos[editableIndex].text = editableItem.textContent;
-
-                    }
-
-                });
-
-                editableItem.setAttribute('contentEditable', true);
-
-
-            });
-
-            saveToLocalStorage();
+            editableItem.setAttribute('contentEditable', true);
 
         });
-
-    }
-
-    function render() {
-        // this will hold the html that will be displayed in the sidebar
-        let listsHtml = '';
-        // iterate through the lists to get their names
-        for (let [listName] of Object.entries(lists)) {
-            listsHtml += `<li class="list-group-item" id="${listName}">${listName}<i><i class="fa-solid fa-trash-can" id="trashCan" style="color: #006efd;"></i></i></li>`;
-        }
-
         
-       
-        document.getElementById('lists').innerHTML = listsHtml;
-        // print out the name of the current list
-       
-        document.getElementById('headerList').innerText = currentList;
-        // iterate over the todos in the current list
-       
-        let todosHtml = '';
-        (lists[currentList]?.todos ?? []).forEach((todoItem) => {
-          todosHtml += `<li class="list-group-item d-flex justify-content-between id=${todoItem.text}">${todoItem.text}</li>`;
-        });
-        // print out the todos
-        document.getElementById('todos').innerHTML = todosHtml;
-       }
+    });
 
-    function renderCurrentList () {
-
-        addNewTodo();
-        addList();
-
-    }
+}
